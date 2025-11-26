@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FIFA 26 – Group A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #1f3b73 0, #05070d 55%, #020308 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .wrapper {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #121522 0, #05070d 40%, #111623 100%);
+      border-radius: 24px;
+      padding: 28px 32px 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+    .header-left { display: flex; flex-direction: column; gap: 4px; }
+
+    .header-right {
+      text-align: right;
+      font-size: 13px;
+      opacity: 0.85;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    /* LOGO */
+    .jappware-logo {
+      width: 150px;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.35));
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: #23d18b; }
+    .title-main {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .subtitle { font-size: 13px; opacity: 0.75; }
+    
+    .standings-label {
+      margin: 18px 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    }
+    .table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+    .table thead {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+    }
+    .table th, .table td {
+      padding: 10px 10px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .table th:first-child, .table td:first-child {
+      text-align: left;
+      padding-left: 6px;
+    }
+    .table th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
+    }
+    .player-cell { display: flex; align-items: center; gap: 11px; }
+    .player-photo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+    .player-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .player-name { font-weight: 600; font-size: 14px; }
+    .table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+    .table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transition: background 0.18s ease-out;
+    }
+    .stat-zero { opacity: 0.85; }
+
+    /* FIXTURES SECTION */
+    .fixtures-title {
+      margin: 28px 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .fixtures {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .matchday-card {
+      background: rgba(0, 0, 0, 0.24);
+      border-radius: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .matchday-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .matchday-name {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.88;
+    }
+
+    .matchday-tag {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .match-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .match-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .match-row:first-child {
+      border-top: none;
+    }
+
+    .team {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .team-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .team-club {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .vs-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      opacity: 0.7;
+      padding: 0 12px;
+    }
+
+    .club-logo {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      margin-right: 6px;
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.6));
+    }
+    .team-with-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .team-with-logo-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper { padding: 20px 18px 24px; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .header-right { text-align: left; align-items: flex-start; }
+      .title-main { font-size: 22px; }
+      .jappware-logo { width: 120px; }
+      .table th:nth-child(n+5), .table td:nth-child(n+5) { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <header class="header">
+      <div class="header-left">
+        <div class="tag">
+          <span class="tag-dot"></span>
+          <span>FIFA 26 • PLAYSTATION CUP</span>
+        </div>
+        <div class="title-main">GROUP STAGE — GROUP A</div>
+        <div class="subtitle">Standings before kick-off. All players start from zero.</div>
+      </div>
+
+      <div class="header-right">
+        <img src="img/jappware_logo.jpg" class="jappware-logo" alt="Jappware Logo" />
+        Format: BO1 · 3 pts win · 1 pt draw<br />
+        Players: Ostap · Maryan · Stas · Malon · Maks · Oleg · Valentyn · Rio
+      </div>
+    </header>
+
+    <!-- STANDINGS -->
+    <div class="standings-label">Standings</div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Pts</th>
+          <th>W</th>
+          <th>D</th>
+          <th>L</th>
+          <th>GF</th>
+          <th>GA</th>
+          <th>GD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/ostap.jpg" alt="Ostap" />
+              </div>
+              <span class="player-name">Ostap</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/maryan.jpg" alt="Maryan" />
+              </div>
+              <span class="player-name">Maryan</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/stas.jpg" alt="Stas" />
+              </div>
+              <span class="player-name">Stas</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/malon.jpg" alt="Malon" />
+              </div>
+              <span class="player-name">Malon</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/mahi.jpg" alt="Maks" />
+              </div>
+              <span class="player-name">Maks</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/oleg.jpg" alt="Oleg" />
+              </div>
+              <span class="player-name">Oleg</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/valentyn.jpg" alt="Valentyn" />
+              </div>
+              <span class="player-name">Valentyn</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-photo">
+                <img src="img/rio.jpg" alt="Rio" />
+              </div>
+              <span class="player-name">Rio</span>
+            </div>
+          </td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+          <td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td><td class="stat-zero">0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- FIXTURES -->
+    <div class="fixtures-title">Fixtures</div>
+
+    <div class="fixtures">
+      <!-- MATCHDAY 1 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 1</div>
+          <div class="matchday-tag">Opening round</div>
+        </div>
+        <div class="match-list">
+
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/dynamo.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Dynamo Kyiv</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Rio</span>
+                <img src="img/clubs/rapid.png" class="club-logo" />
+              </div>
+              <span class="team-club">Rapid Wien</span>
+            </div>
+          </div>
+
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/galatasaray.png" class="club-logo" />
+                <span class="team-name">Maryan</span>
+              </div>
+              <span class="team-club">Galatasaray</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Valentyn</span>
+                <img src="img/clubs/inter_miami.png" class="club-logo" />
+              </div>
+              <span class="team-club">Inter Miami</span>
+            </div>
+          </div>
+
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/malmo.png" class="club-logo" />
+                <span class="team-name">Stas</span>
+              </div>
+              <span class="team-club">Malmö FF</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Oleg</span>
+                <img src="img/clubs/empoli.png" class="club-logo" />
+              </div>
+              <span class="team-club">Empoli</span>
+            </div>
+          </div>
+
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/dorking.png" class="club-logo" />
+                <span class="team-name">Malon</span>
+              </div>
+              <span class="team-club">Dorking Wanderers</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maks</span>
+                <img src="img/clubs/real.png" class="club-logo" />
+              </div>
+              <span class="team-club">Real Madrid</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Matchday 2 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 2</div>
+          <div class="matchday-tag">Second round</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/manutd.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Manchester United</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Valentyn</span>
+                <img src="img/clubs/galatasaray.png" class="club-logo" />
+              </div>
+              <span class="team-club">Galatasaray</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/rayo.png" class="club-logo" />
+                <span class="team-name">Rio</span>
+              </div>
+              <span class="team-club">Rayo Vallecano</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Oleg</span>
+                <img src="img/clubs/dorking.png" class="club-logo" />
+              </div>
+              <span class="team-club">Dorking Wanderers</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/inter_miami.png" class="club-logo" />
+                <span class="team-name">Maryan</span>
+              </div>
+              <span class="team-club">Inter Miami</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maks</span>
+                <img src="img/clubs/barca.png" class="club-logo" />
+              </div>
+              <span class="team-club">FC Barcelona</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/dynamo.png" class="club-logo" />
+                <span class="team-name">Stas</span>
+              </div>
+              <span class="team-club">Dynamo Kyiv</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Malon</span>
+                <img src="img/clubs/fgr.png" class="club-logo" />
+              </div>
+              <span class="team-club">Forest Green Rovers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchday 3 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 3</div>
+          <div class="matchday-tag">Third round</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/fgr.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Forest Green Rovers</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Oleg</span>
+                <img src="img/clubs/fgr.png" class="club-logo" />
+              </div>
+              <span class="team-club">Forest Green Rovers</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/manutd.png" class="club-logo" />
+                <span class="team-name">Valentyn</span>
+              </div>
+              <span class="team-club">Manchester United</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maks</span>
+                <img src="img/clubs/inter_miami.png" class="club-logo" />
+              </div>
+              <span class="team-club">Inter Miami</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/fiorentina.png" class="club-logo" />
+                <span class="team-name">Rio</span>
+              </div>
+              <span class="team-club">Fiorentina</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Malon</span>
+                <img src="img/clubs/rapid.png" class="club-logo" />
+              </div>
+              <span class="team-club">Rapid Wien</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/bologna.png" class="club-logo" />
+                <span class="team-name">Maryan</span>
+              </div>
+              <span class="team-club">Bologna</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Stas</span>
+                <img src="img/clubs/empoli.png" class="club-logo" />
+              </div>
+              <span class="team-club">Empoli</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchday 4 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 4</div>
+          <div class="matchday-tag">Mid-stage</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/real.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Real Madrid</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maks</span>
+                <img src="img/clubs/manutd.png" class="club-logo" />
+              </div>
+              <span class="team-club">Manchester United</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/dynamo.png" class="club-logo" />
+                <span class="team-name">Oleg</span>
+              </div>
+              <span class="team-club">Dynamo Kyiv</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Malon</span>
+                <img src="img/clubs/bologna.png" class="club-logo" />
+              </div>
+              <span class="team-club">Bologna</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/real.png" class="club-logo" />
+                <span class="team-name">Valentyn</span>
+              </div>
+              <span class="team-club">Real Madrid</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Stas</span>
+                <img src="img/clubs/galatasaray.png" class="club-logo" />
+              </div>
+              <span class="team-club">Galatasaray</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/aston_villa.png" class="club-logo" />
+                <span class="team-name">Rio</span>
+              </div>
+              <span class="team-club">Aston Villa</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maryan</span>
+                <img src="img/clubs/barca.png" class="club-logo" />
+              </div>
+              <span class="team-club">FC Barcelona</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchday 5 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 5</div>
+          <div class="matchday-tag">Closing in</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/empoli.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Empoli</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Malon</span>
+                <img src="img/clubs/celta.png" class="club-logo" />
+              </div>
+              <span class="team-club">Celta Vigo</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/galatasaray.png" class="club-logo" />
+                <span class="team-name">Maks</span>
+              </div>
+              <span class="team-club">Galatasaray</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Stas</span>
+                <img src="img/clubs/dorking.png" class="club-logo" />
+              </div>
+              <span class="team-club">Dorking Wanderers</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/malmo.png" class="club-logo" />
+                <span class="team-name">Oleg</span>
+              </div>
+              <span class="team-club">Malmö FF</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maryan</span>
+                <img src="img/clubs/rapid.png" class="club-logo" />
+              </div>
+              <span class="team-club">Rapid Wien</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/fiorentina.png" class="club-logo" />
+                <span class="team-name">Valentyn</span>
+              </div>
+              <span class="team-club">Fiorentina</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Rio</span>
+                <img src="img/clubs/fgr.png" class="club-logo" />
+              </div>
+              <span class="team-club">Forest Green Rovers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchday 6 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 6</div>
+          <div class="matchday-tag">Penultimate</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/fiorentina.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Fiorentina</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Stas</span>
+                <img src="img/clubs/brighton.png" class="club-logo" />
+              </div>
+              <span class="team-club">Brighton</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/rayo.png" class="club-logo" />
+                <span class="team-name">Malon</span>
+              </div>
+              <span class="team-club">Rayo Vallecano</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maryan</span>
+                <img src="img/clubs/celta.png" class="club-logo" />
+              </div>
+              <span class="team-club">Celta Vigo</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/aston_villa.png" class="club-logo" />
+                <span class="team-name">Maks</span>
+              </div>
+              <span class="team-club">Aston Villa</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Rio</span>
+                <img src="img/clubs/malmo.png" class="club-logo" />
+              </div>
+              <span class="team-club">Malmö FF</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/rapid.png" class="club-logo" />
+                <span class="team-name">Oleg</span>
+              </div>
+              <span class="team-club">Rapid Wien</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Valentyn</span>
+                <img src="img/clubs/celta.png" class="club-logo" />
+              </div>
+              <span class="team-club">Celta Vigo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matchday 7 -->
+      <div class="matchday-card">
+        <div class="matchday-header">
+          <div class="matchday-name">Matchday 7</div>
+          <div class="matchday-tag">Final group round</div>
+        </div>
+        <div class="match-list">
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/rayo.png" class="club-logo" />
+                <span class="team-name">Ostap</span>
+              </div>
+              <span class="team-club">Rayo Vallecano</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Maryan</span>
+                <img src="img/clubs/aston_villa.png" class="club-logo" />
+              </div>
+              <span class="team-club">Aston Villa</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/inter_miami.png" class="club-logo" />
+                <span class="team-name">Stas</span>
+              </div>
+              <span class="team-club">Inter Miami</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Rio</span>
+                <img src="img/clubs/empoli.png" class="club-logo" />
+              </div>
+              <span class="team-club">Empoli</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/dynamo.png" class="club-logo" />
+                <span class="team-name">Malon</span>
+              </div>
+              <span class="team-club">Dynamo Kyiv</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Valentyn</span>
+                <img src="img/clubs/barca.png" class="club-logo" />
+              </div>
+              <span class="team-club">FC Barcelona</span>
+            </div>
+          </div>
+          <div class="match-row">
+            <div class="team">
+              <div class="team-with-logo">
+                <img src="img/clubs/brighton.png" class="club-logo" />
+                <span class="team-name">Maks</span>
+              </div>
+              <span class="team-club">Brighton</span>
+            </div>
+            <div class="vs-label">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team-with-logo-right">
+                <span class="team-name">Oleg</span>
+                <img src="img/clubs/bologna.png" class="club-logo" />
+              </div>
+              <span class="team-club">Bologna</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- end fixtures -->
+
+  </div>
+</body>
+</html>
