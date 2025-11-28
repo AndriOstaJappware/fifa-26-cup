@@ -129,6 +129,75 @@
     }
     .stat-zero { opacity: 0.85; }
 
+    /* LIVE TWITCH SECTION */
+    .live-title {
+      margin: 10px 0 6px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding-bottom: 6px;
+      border-bottom: 2px solid rgba(255,255,255,0.15);
+    }
+    .live-wrapper {
+      margin-top: 14px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .live-player {
+      flex: 2 1 320px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .live-player iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .live-info {
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e91916;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .live-link {
+      color: #7fd6ff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .live-link:hover {
+      text-decoration: underline;
+    }
+
     /* FIXTURES SECTION */
     .fixtures-title {
       margin: 28px 0 10px;
@@ -241,6 +310,7 @@
       .title-main { font-size: 22px; }
       .jappware-logo { width: 120px; }
       .table th:nth-child(n+5), .table td:nth-child(n+5) { display: none; }
+      .live-wrapper { flex-direction: column; }
     }
   </style>
 </head>
@@ -263,6 +333,34 @@
         Players: Ostap · Maryan · Stas · Malon · Maks · Oleg · Valentyn · Rio · Nazar
       </div>
     </header>
+
+    <!-- LIVE ON TWITCH -->
+    <div class="live-title">Live on Twitch</div>
+    <div class="live-wrapper">
+      <div class="live-player">
+        <!-- replace YOUR_TWITCH_CHANNEL with real channel name -->
+        <iframe
+          src="https://player.twitch.tv/?channel=YOUR_TWITCH_CHANNEL&parent=andriostajappware.github.io"
+          allowfullscreen
+          scrolling="no"
+          allow="autoplay; fullscreen">
+        </iframe>
+      </div>
+      <div class="live-info">
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span>Live stream</span>
+        </div>
+        <div>Дивіться матчі турніру FIFA 26 Jappware в прямому ефірі на Twitch.</div>
+        <div>
+          Канал: 
+          <a class="live-link" href="https://www.twitch.tv/YOUR_TWITCH_CHANNEL" target="_blank" rel="noopener">
+            twitch.tv/YOUR_TWITCH_CHANNEL
+          </a>
+        </div>
+        <div>Результати та календар завжди оновлені тут на сторінці турніру.</div>
+      </div>
+    </div>
 
     <!-- STANDINGS -->
     <div class="standings-label">Standings</div>
